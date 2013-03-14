@@ -1,6 +1,6 @@
 <package>
   <name>collada_urdf</name>
-  <version>1.10.0</version>
+  <version>1.10.2</version>
   <description>
 
     This package contains a tool to convert Unified Robot Description Format (URDF) documents into COLLAborative Design Activity (COLLADA) documents.
@@ -10,7 +10,8 @@
   </description>
   <author>Tim Field</author>
   <author>Rosen Diankov</author>
-  <maintainer email="isucan@willowgarage.com">Ioan Sucan</maintainer>  <license>BSD</license>
+  <maintainer email="isucan@willowgarage.com">Ioan Sucan</maintainer>
+  <license>BSD</license>
   <url type="website">http://ros.org/wiki/collada_urdf</url>
 
   <buildtool_depend>catkin</buildtool_depend>
