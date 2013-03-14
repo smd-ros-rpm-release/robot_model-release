@@ -29,7 +29,7 @@ tracks:
       -i :{release_inc}
     devel_branch: hydro-devel
     last_version: 1.10.0
-    name: upstream_hydro
+    name: robot_model
     patches: null
     release_inc: '0'
     release_tag: :{version}
