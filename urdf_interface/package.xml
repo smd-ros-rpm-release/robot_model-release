@@ -1,25 +1,20 @@
 <package>
-  <name>urdf_parser</name>
+  <name>urdf_interface</name>
   <version>1.9.34</version>
   <description>
     This package is DEPRECATED. Please use the urdfdom dependency directly instead of this package.
 
-    This package contains a C++ parser for the Unified Robot
-    Description Format (URDF), which is an XML format for representing
-    a robot model.  The parser reads a URDF XML robot description, and
-    creates a C++ URDF model. Although it is possible to directly use
-    this parser when working with URDF robot descriptions, the
-    preferred user API is found in the urdf package.
+    This package contains URDF C++ interface headers that define the
+    user API to the C++ URDF model.
   </description>
 
   <author>Wim Meeussen</author>
   <author>John Hsu</author>
-  <author>Rosen Diankov</author>
   <maintainer email="isucan@willowgarage.com">Ioan Sucan</maintainer>
 
   <license>BSD</license>
 
-  <url type="website">http://ros.org/wiki/urdf_parser</url>
+  <url type="website">http://ros.org/wiki/urdf_interface</url>
   <url type="repository">https://github.com/ros/robot_model</url>
   <url type="bugtracker">https://github.com/ros/robot_model/issues</url>
 
