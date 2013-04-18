@@ -1,0 +1,12 @@
+Source: ros-groovy-srdf
+Section: misc
+Priority: extra
+Maintainer: Ioan Sucan <isucan@willowgarage.com>
+Build-Depends: debhelper (>= 7.0.50~), libtinyxml-dev, ros-groovy-catkin, ros-groovy-srdfdom
+Homepage: http://ros.org/wiki/srdf
+Standards-Version: 3.9.2
+
+Package: ros-groovy-srdf
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libtinyxml-dev, ros-groovy-srdfdom
+Description: SRDF (Semantic Robot Description Format) is a representation of semantic information about robots.
