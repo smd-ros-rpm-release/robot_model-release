@@ -1,6 +1,6 @@
 <package>
   <name>collada_urdf</name>
-  <version>1.10.9</version>
+  <version>1.9.35</version>
   <description>
     This package contains a tool to convert Unified Robot Description Format (URDF) documents into COLLAborative Design Activity (COLLADA) documents.
 
@@ -25,7 +25,6 @@
   <build_depend>collada_parser</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>urdf</build_depend>
-  <build_depend>geometric_shapes</build_depend>
 
   <run_depend>angles</run_depend>
   <run_depend>assimp</run_depend>
@@ -34,6 +33,5 @@
   <run_depend>resource_retriever</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>urdf</run_depend>
-  <run_depend>geometric_shapes</run_depend>
 
 </package>

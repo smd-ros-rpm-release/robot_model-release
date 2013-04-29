@@ -8,9 +8,7 @@ find_package(catkin REQUIRED COMPONENTS urdfdom_headers roscpp)
 catkin_package( 
   LIBRARIES ${PROJECT_NAME}
   INCLUDE_DIRS include
-  CATKIN_DEPENDS roscpp
-  DEPENDS urdfdom_headers
-)
+  CATKIN_DEPENDS urdfdom_headers roscpp)
 
 include_directories(${Boost_INCLUDE_DIR})
 include_directories(include ${catkin_INCLUDE_DIRS})

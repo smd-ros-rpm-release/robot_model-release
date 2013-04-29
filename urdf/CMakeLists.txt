@@ -6,9 +6,7 @@ find_package(catkin REQUIRED COMPONENTS urdfdom urdfdom_headers collada_parser r
 catkin_package(
   LIBRARIES ${PROJECT_NAME}
   INCLUDE_DIRS include
-  CATKIN_DEPENDS collada_parser rosconsole_bridge roscpp
-  DEPENDS urdfdom_headers urdfdom
-)
+  CATKIN_DEPENDS urdfdom urdfdom_headers collada_parser rosconsole_bridge roscpp)
 
 include_directories(include)
 
