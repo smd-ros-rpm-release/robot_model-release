@@ -1,0 +1,12 @@
+Source: ros-hydro-urdf
+Section: misc
+Priority: extra
+Maintainer: Ioan Sucan <isucan@willowgarage.com>
+Build-Depends: debhelper (>= 7.0.50~), ros-hydro-catkin, ros-hydro-pluginlib, ros-hydro-rosconsole-bridge, ros-hydro-roscpp, ros-hydro-urdf-parser-plugin, ros-hydro-urdfdom, ros-hydro-urdfdom-headers
+Homepage: http://ros.org/wiki/urdf
+Standards-Version: 3.9.2
+
+Package: ros-hydro-urdf
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-hydro-pluginlib, ros-hydro-rosconsole-bridge, ros-hydro-roscpp, ros-hydro-urdf-parser-plugin, ros-hydro-urdfdom, ros-hydro-urdfdom-headers
+Description: This package contains a C++ parser for the Unified Robot Description Format (URDF), which is an XML format for representing a robot model. The code API of the parser has been through our review process and will remain backwards compatible in future releases.
