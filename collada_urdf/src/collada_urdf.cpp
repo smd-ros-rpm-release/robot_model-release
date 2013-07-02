@@ -59,8 +59,6 @@
 #include <boost/date_time/posix_time/posix_time_io.hpp>
 #include <boost/format.hpp>
 #include <boost/array.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #if defined(IS_ASSIMP3)
 #include <assimp/scene.h>
@@ -77,10 +75,8 @@
 #include <DefaultLogger.h>
 #include <IOStream.h>
 #include <IOSystem.h>
-#endif
 
-#include <geometric_shapes/shapes.h>
-#include <geometric_shapes/mesh_operations.h>
+#endif
 
 #define FOREACH(it, v) for(typeof((v).begin())it = (v).begin(); it != (v).end(); (it)++)
 #define FOREACHC FOREACH
@@ -515,9 +511,7 @@ private:
 class Triangle
 {
 public:
-    Triangle(const urdf::Vector3 &_p1, const urdf::Vector3 &_p2, const urdf::Vector3 &_p3) :
-      p1(_p1), p2(_p2), p3(_p3)
-    {}
+    Triangle(const urdf::Vector3 _p1, const urdf::Vector3 _p2, const urdf::Vector3 _p3) { this->p1 = _p1; this->p2 = _p2; this->p3 = _p3;};
     Triangle() { this->clear(); };
     urdf::Vector3 p1, p2, p3;
 
@@ -1154,24 +1148,63 @@ protected:
             geometry_origin = plink->collision->origin;
         }
 
-        if( !!geometry ) {
-            int igeom = 0;
-            string geomid = _ComputeId(str(boost::format("g%s_%s_geom%d")%strModelUri%linksid%igeom));
-            domGeometryRef pdomgeom = _WriteGeometry(geometry, geomid);
-            domInstance_geometryRef pinstgeom = daeSafeCast<domInstance_geometry>(pnode->add(COLLADA_ELEMENT_INSTANCE_GEOMETRY));
-            pinstgeom->setUrl((string("#")+geomid).c_str());
+        urdf::Pose geometry_origin_inv = _poseInverse(geometry_origin);
 
-            // material
-            _WriteMaterial(pdomgeom->getID(), material);
-            domBind_materialRef pmat = daeSafeCast<domBind_material>(pinstgeom->add(COLLADA_ELEMENT_BIND_MATERIAL));
-            domBind_material::domTechnique_commonRef pmattec = daeSafeCast<domBind_material::domTechnique_common>(pmat->add(COLLADA_ELEMENT_TECHNIQUE_COMMON));
-            domInstance_materialRef pinstmat = daeSafeCast<domInstance_material>(pmattec->add(COLLADA_ELEMENT_INSTANCE_MATERIAL));
-            pinstmat->setTarget(xsAnyURI(*pdomgeom, string("#")+geomid+string("_mat")));
-            pinstmat->setSymbol("mat0");
+        if( !!geometry ) {
+            bool write_visual = false;
+            if ( !!plink->visual ) {
+              if (plink->visual_groups.size() > 0) {
+                std::map<std::string, boost::shared_ptr<std::vector<boost::shared_ptr<urdf::Visual > > > >::const_iterator def_group
+                  = plink->visual_groups.find("default");
+                if (def_group != plink->visual_groups.end()) {
+                  if (def_group->second->size() > 1) {
+                    int igeom = 0;
+                    for (std::vector<boost::shared_ptr<urdf::Visual > >::const_iterator it = def_group->second->begin();
+                         it != def_group->second->end(); it++) {
+                      // geom
+                      string geomid = _ComputeId(str(boost::format("g%s_%s_geom%d")%strModelUri%linksid%igeom));
+                      igeom++;
+                      domGeometryRef pdomgeom;
+                      if ( it != def_group->second->begin() ) {
+                        urdf::Pose org_trans =  _poseMult(geometry_origin_inv, (*it)->origin);
+                        pdomgeom = _WriteGeometry((*it)->geometry, geomid, &org_trans);
+                      } else {
+                        pdomgeom = _WriteGeometry((*it)->geometry, geomid);
+                      }
+                      domInstance_geometryRef pinstgeom = daeSafeCast<domInstance_geometry>(pnode->add(COLLADA_ELEMENT_INSTANCE_GEOMETRY));
+                      pinstgeom->setUrl((string("#") + geomid).c_str());
+                      // material
+                      _WriteMaterial(pdomgeom->getID(), (*it)->material);
+                      domBind_materialRef pmat = daeSafeCast<domBind_material>(pinstgeom->add(COLLADA_ELEMENT_BIND_MATERIAL));
+                      domBind_material::domTechnique_commonRef pmattec = daeSafeCast<domBind_material::domTechnique_common>(pmat->add(COLLADA_ELEMENT_TECHNIQUE_COMMON));
+                      domInstance_materialRef pinstmat = daeSafeCast<domInstance_material>(pmattec->add(COLLADA_ELEMENT_INSTANCE_MATERIAL));
+                      pinstmat->setTarget(xsAnyURI(*pdomgeom, string("#")+geomid+string("_mat")));
+                      pinstmat->setSymbol("mat0");
+                      write_visual = true;
+                    }
+                  }
+                }
+              }
+            }
+            if (!write_visual) {
+              // just 1 visual
+              int igeom = 0;
+              string geomid = _ComputeId(str(boost::format("g%s_%s_geom%d")%strModelUri%linksid%igeom));
+              domGeometryRef pdomgeom = _WriteGeometry(geometry, geomid);
+              domInstance_geometryRef pinstgeom = daeSafeCast<domInstance_geometry>(pnode->add(COLLADA_ELEMENT_INSTANCE_GEOMETRY));
+              pinstgeom->setUrl((string("#")+geomid).c_str());
+
+              // material
+              _WriteMaterial(pdomgeom->getID(), material);
+              domBind_materialRef pmat = daeSafeCast<domBind_material>(pinstgeom->add(COLLADA_ELEMENT_BIND_MATERIAL));
+              domBind_material::domTechnique_commonRef pmattec = daeSafeCast<domBind_material::domTechnique_common>(pmat->add(COLLADA_ELEMENT_TECHNIQUE_COMMON));
+              domInstance_materialRef pinstmat = daeSafeCast<domInstance_material>(pmattec->add(COLLADA_ELEMENT_INSTANCE_MATERIAL));
+              pinstmat->setTarget(xsAnyURI(*pdomgeom, string("#")+geomid+string("_mat")));
+              pinstmat->setSymbol("mat0");
+            }
         }
 
         _WriteTransformation(pnode, geometry_origin);
-        urdf::Pose geometry_origin_inv = _poseInverse(geometry_origin);
 
         // process all children
         FOREACHC(itjoint, plink->child_joints) {
@@ -1236,35 +1269,105 @@ protected:
         return out;
     }
 
-    domGeometryRef _WriteGeometry(boost::shared_ptr<urdf::Geometry> geometry, const std::string& geometry_id)
+    domGeometryRef _WriteGeometry(boost::shared_ptr<urdf::Geometry> geometry, const std::string& geometry_id, urdf::Pose *org_trans = NULL)
     {
         domGeometryRef cgeometry = daeSafeCast<domGeometry>(_geometriesLib->add(COLLADA_ELEMENT_GEOMETRY));
         cgeometry->setId(geometry_id.c_str());
         switch (geometry->type) {
         case urdf::Geometry::MESH: {
             urdf::Mesh* urdf_mesh = (urdf::Mesh*) geometry.get();
-            _loadMesh(urdf_mesh->filename, cgeometry, urdf_mesh->scale);
+            _loadMesh(urdf_mesh->filename, cgeometry, urdf_mesh->scale, org_trans);
             break;
         }
         case urdf::Geometry::SPHERE: {
-	    shapes::Sphere sphere(static_cast<urdf::Sphere*>(geometry.get())->radius);
-	    boost::scoped_ptr<shapes::Mesh> mesh(shapes::createMeshFromShape(sphere));
-            _loadVertices(mesh.get(), cgeometry);
+            urdf::Sphere* urdf_sphere = (urdf::Sphere *) geometry.get();
+            double r = urdf_sphere->radius;
+            double phi, phid;
+            int seg = 64, ring = 64;
+            phid = M_PI * 2 / seg;
+            phi = 0;
+
+            double theta, thetad;
+            thetad = M_PI / (ring + 1);
+            theta = 0;
+
+            std::vector<Triangle> sphere_vertices;
+            std::vector<urdf::Vector3> points;
+
+            for ( unsigned int i = 0; i < ring; ++ i ) {
+                double theta_ = theta + thetad * ( i + 1 );
+                for (unsigned int j = 0; j < seg; ++ j ) {
+                    points.push_back(urdf::Vector3(r * sin(theta_) * cos(phi + j * phid), r * sin(theta_) * sin(phi + j * phid), r * cos(theta_)));
+                }
+            }
+            points.push_back(urdf::Vector3(0, 0,  r));
+            points.push_back(urdf::Vector3(0, 0, -r));
+            for(unsigned int i = 0; i < ring - 1; ++i) {
+                for(unsigned int j = 0; j < seg; ++j) {
+                    unsigned int a, b, c, d;
+                    a = i * seg + j;
+                    b = (j == seg - 1) ? (i * seg) : (i * seg + j + 1);
+                    c = (i + 1) * seg + j;
+                    d = (j == seg - 1) ? ((i + 1) * seg) : ((i + 1) * seg + j + 1);
+                    sphere_vertices.push_back(Triangle(points[a], points[c], points[b]));
+                    sphere_vertices.push_back(Triangle(points[b], points[c], points[d]));
+                }
+            }
+
+            for(unsigned int j = 0; j < seg; ++j) {
+                unsigned int a, b;
+                a = j;
+                b = (j == seg - 1) ? 0 : (j + 1);
+                sphere_vertices.push_back(Triangle(points[ring*seg], points[a], points[b]));
+                a = (ring - 1) * seg + j;
+                b = (j == seg - 1) ? (ring - 1) * seg : ((ring - 1) * seg + j + 1);
+                sphere_vertices.push_back(Triangle(points[a], points[ring*seg+1], points[b]));
+            }
+
+            _loadVertices(sphere_vertices, cgeometry, org_trans);
             break;
         }
         case urdf::Geometry::BOX: {
-	    shapes::Box box(static_cast<urdf::Box*>(geometry.get())->dim.x / 2.0,
-			    static_cast<urdf::Box*>(geometry.get())->dim.y / 2.0,
-			    static_cast<urdf::Box*>(geometry.get())->dim.z / 2.0);
-	    boost::scoped_ptr<shapes::Mesh> mesh(shapes::createMeshFromShape(box));
-            _loadVertices(mesh.get(), cgeometry);
+            urdf::Box* urdf_box = (urdf::Box*) geometry.get();
+            double x = urdf_box->dim.x/2;
+            double y = urdf_box->dim.y/2;
+            double z = urdf_box->dim.z/2;
+            std::vector<Triangle> box_vertices;
+            box_vertices.push_back(Triangle(urdf::Vector3( x,  y, -z), urdf::Vector3(-x, -y, -z), urdf::Vector3(-x,  y, -z)));
+            box_vertices.push_back(Triangle(urdf::Vector3(-x, -y, -z), urdf::Vector3( x,  y, -z), urdf::Vector3( x, -y, -z)));
+            box_vertices.push_back(Triangle(urdf::Vector3(-x,  y,  z), urdf::Vector3( x, -y,  z), urdf::Vector3( x,  y,  z)));
+            box_vertices.push_back(Triangle(urdf::Vector3( x, -y,  z), urdf::Vector3(-x,  y,  z), urdf::Vector3(-x, -y,  z)));
+
+            box_vertices.push_back(Triangle(urdf::Vector3( x,  y, -z), urdf::Vector3(-x,  y,  z), urdf::Vector3( x,  y,  z)));
+            box_vertices.push_back(Triangle(urdf::Vector3(-x,  y,  z), urdf::Vector3( x,  y, -z), urdf::Vector3(-x,  y, -z)));
+            box_vertices.push_back(Triangle(urdf::Vector3( x, -y, -z), urdf::Vector3( x,  y,  z), urdf::Vector3( x, -y,  z)));
+            box_vertices.push_back(Triangle(urdf::Vector3( x,  y,  z), urdf::Vector3( x, -y, -z), urdf::Vector3( x,  y, -z)));
+
+            box_vertices.push_back(Triangle(urdf::Vector3(-x, -y, -z), urdf::Vector3( x, -y,  z), urdf::Vector3(-x, -y,  z)));
+            box_vertices.push_back(Triangle(urdf::Vector3( x, -y,  z), urdf::Vector3(-x, -y, -z), urdf::Vector3( x, -y, -z)));
+            box_vertices.push_back(Triangle(urdf::Vector3(-x,  y, -z), urdf::Vector3(-x, -y,  z), urdf::Vector3(-x,  y,  z)));
+            box_vertices.push_back(Triangle(urdf::Vector3(-x, -y,  z), urdf::Vector3(-x,  y, -z), urdf::Vector3(-x, -y, -z)));
+
+            _loadVertices(box_vertices, cgeometry, org_trans);
             break;
         }
         case urdf::Geometry::CYLINDER: {
-	    shapes::Cylinder cyl(static_cast<urdf::Cylinder*>(geometry.get())->radius,
-				 static_cast<urdf::Cylinder*>(geometry.get())->length);
-	    boost::scoped_ptr<shapes::Mesh> mesh(shapes::createMeshFromShape(cyl));
-            _loadVertices(mesh.get(), cgeometry);
+            urdf::Cylinder* urdf_cylinder = (urdf::Cylinder*) geometry.get();
+            double l = urdf_cylinder->length;
+            double r = urdf_cylinder->radius;
+            std::vector<Triangle> cylinder_vertices;
+            for(int i = 0; i < 32; i++ ) {
+                double s1 = sin(2*M_PI*i/32);
+                double c1 = cos(2*M_PI*i/32);
+                double s2 = sin(2*M_PI*(i+1)/32);
+                double c2 = cos(2*M_PI*(i+1)/32);
+                cylinder_vertices.push_back(Triangle(urdf::Vector3(0, 0,-l/2), urdf::Vector3(r*s2, r*c2,-l/2), urdf::Vector3(r*s1, r*c1,-l/2)));
+                cylinder_vertices.push_back(Triangle(urdf::Vector3(r*s1, r*c1,-l/2), urdf::Vector3(r*s2, r*c2,-l/2), urdf::Vector3(r*s2, r*c2, l/2)));
+                cylinder_vertices.push_back(Triangle(urdf::Vector3(r*s1, r*c1,-l/2), urdf::Vector3(r*s2, r*c2, l/2), urdf::Vector3(r*s1, r*c1, l/2)));
+                cylinder_vertices.push_back(Triangle(urdf::Vector3(0, 0, l/2), urdf::Vector3(r*s1, r*c1, l/2), urdf::Vector3(r*s2, r*c2, l/2)));
+            }
+            _loadVertices(cylinder_vertices, cgeometry, org_trans);
+
             break;
         }
         default: {
@@ -1393,24 +1496,52 @@ protected:
         return pmout;
     }
 
-    void _loadVertices(const shapes::Mesh *mesh, domGeometryRef pdomgeom) {
-	
-	// convert the mesh into an STL binary (in memory)
-	std::vector<char> buffer;
-	shapes::writeSTLBinary(mesh, buffer);
-	
-	// Create an instance of the Importer class
-	Assimp::Importer importer;
-	
-	// And have it read the given file with some postprocessing
-	const aiScene* scene = importer.ReadFileFromMemory(reinterpret_cast<const void*>(&buffer[0]), buffer.size(),
-							   aiProcess_Triangulate            |
-							   aiProcess_JoinIdenticalVertices  |
-							   aiProcess_SortByPType            |
-							   aiProcess_OptimizeGraph          |
-							   aiProcess_OptimizeMeshes, "stl");
-	
-	// Note: we do this mesh -> STL -> assimp mesh because the aiScene::aiScene symbol is hidden by default 
+    void _loadVertices(const std::vector<Triangle> vertices, domGeometryRef pdomgeom, urdf::Pose *org_trans) {
+#if defined(IS_ASSIMP3)
+            // aiScene::aiScene is a hidden symbol in assimp 3; so we hack..
+            aiScene* scene = (aiScene*)malloc(sizeof(aiScene));
+#else
+            aiScene* scene = new aiScene();
+#endif
+            scene->mRootNode = new aiNode();
+            scene->mRootNode->mNumMeshes = 1;
+            scene->mRootNode->mMeshes  = (unsigned int*)malloc(sizeof(unsigned int));
+            scene->mRootNode->mMeshes[0] = 0;
+            scene->mNumMeshes = 1;
+            scene->mMeshes = (aiMesh **)malloc(sizeof(aiMesh*));
+            scene->mMeshes[0] = new aiMesh();
+            scene->mMeshes[0]->mNumFaces = 0;
+            scene->mMeshes[0]->mFaces = (aiFace *)malloc(sizeof(aiFace)*vertices.size());
+            scene->mMeshes[0]->mNumVertices = 0;
+            scene->mMeshes[0]->mVertices = (aiVector3D *)malloc(sizeof(aiVector3D)*vertices.size()*3);
+
+            FOREACH(it, vertices) {
+                scene->mMeshes[0]->mFaces[scene->mMeshes[0]->mNumFaces].mNumIndices = 3;
+                scene->mMeshes[0]->mFaces[scene->mMeshes[0]->mNumFaces].mIndices = (unsigned int *)malloc(sizeof(unsigned int)*3);
+                urdf::Vector3 v1;
+                if (!!org_trans) v1 = _poseMult(*org_trans, it->p1); else v1 = it->p1;
+                scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mNumVertices].x = v1.x;
+                scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mNumVertices].y = v1.y;
+                scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mNumVertices].z = v1.z;
+                scene->mMeshes[0]->mFaces[scene->mMeshes[0]->mNumFaces].mIndices[0] = scene->mMeshes[0]->mNumVertices;
+                scene->mMeshes[0]->mNumVertices++;
+                urdf::Vector3 v2;
+                if (!!org_trans) v2 = _poseMult(*org_trans, it->p2); else v2 = it->p2;
+                scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mNumVertices].x = v2.x;
+                scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mNumVertices].y = v2.y;
+                scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mNumVertices].z = v2.z;
+                scene->mMeshes[0]->mFaces[scene->mMeshes[0]->mNumFaces].mIndices[1] = scene->mMeshes[0]->mNumVertices;
+                scene->mMeshes[0]->mNumVertices++;
+                urdf::Vector3 v3;
+                if (!!org_trans) v3 = _poseMult(*org_trans, it->p3); else v3 = it->p3;
+                scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mNumVertices].x = v3.x;
+                scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mNumVertices].y = v3.y;
+                scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mNumVertices].z = v3.z;
+                scene->mMeshes[0]->mFaces[scene->mMeshes[0]->mNumFaces].mIndices[2] = scene->mMeshes[0]->mNumVertices;
+                scene->mMeshes[0]->mNumVertices++;
+
+                scene->mMeshes[0]->mNumFaces++;
+            }
 
             domMeshRef pdommesh = daeSafeCast<domMesh>(pdomgeom->add(COLLADA_ELEMENT_MESH));
             domSourceRef pvertsource = daeSafeCast<domSource>(pdommesh->add(COLLADA_ELEMENT_SOURCE));
@@ -1446,7 +1577,7 @@ protected:
             pacc->setCount(parray->getCount());
     }
 
-    void _loadMesh(std::string const& filename, domGeometryRef pdomgeom, const urdf::Vector3& scale)
+    void _loadMesh(std::string const& filename, domGeometryRef pdomgeom, const urdf::Vector3& scale, urdf::Pose *org_trans)
     {
         const aiScene* scene = _importer.ReadFile(filename, aiProcess_SortByPType|aiProcess_Triangulate); //|aiProcess_GenNormals|aiProcess_GenUVCoords|aiProcess_FlipUVs);
         if( !scene ) {
@@ -1491,11 +1622,11 @@ protected:
             pvertinput->setSemantic("POSITION");
             pvertinput->setSource(domUrifragment(*pvertsource, string("#")+string(pvertsource->getID())));
         }
-        _buildAiMesh(scene,scene->mRootNode,pdommesh,parray, pdomgeom->getID(),scale);
+        _buildAiMesh(scene,scene->mRootNode,pdommesh,parray, pdomgeom->getID(),scale,org_trans);
         pacc->setCount(parray->getCount());
     }
 
-    void _buildAiMesh(const aiScene* scene, aiNode* node, domMeshRef pdommesh, domFloat_arrayRef parray, const string& geomid, const urdf::Vector3& scale)
+    void _buildAiMesh(const aiScene* scene, aiNode* node, domMeshRef pdommesh, domFloat_arrayRef parray, const string& geomid, const urdf::Vector3& scale, urdf::Pose *org_trans = NULL)
     {
         if( !node ) {
             return;
@@ -1527,9 +1658,20 @@ protected:
                 for (uint32_t j = 0; j < input_mesh->mNumVertices; j++) {
                     aiVector3D p = input_mesh->mVertices[j];
                     p *= transform;
-                    parray->getValue().append(p.x*scale.x);
-                    parray->getValue().append(p.y*scale.y);
-                    parray->getValue().append(p.z*scale.z);
+                    if (org_trans) {
+                      urdf::Vector3 vv;
+                      vv.x = p.x*scale.x;
+                      vv.y = p.y*scale.y;
+                      vv.z = p.z*scale.z;
+                      urdf::Vector3 nv = _poseMult(*org_trans, vv);
+                      parray->getValue().append(nv.x);
+                      parray->getValue().append(nv.y);
+                      parray->getValue().append(nv.z);
+                    } else {
+                      parray->getValue().append(p.x*scale.x);
+                      parray->getValue().append(p.y*scale.y);
+                      parray->getValue().append(p.z*scale.z);
+                    }
                 }
             }
 
@@ -1612,7 +1754,7 @@ protected:
         }
 
         for (uint32_t i=0; i < node->mNumChildren; ++i) {
-            _buildAiMesh(scene, node->mChildren[i], pdommesh,parray,geomid,scale);
+            _buildAiMesh(scene, node->mChildren[i], pdommesh,parray,geomid,scale,org_trans);
         }
     }
 

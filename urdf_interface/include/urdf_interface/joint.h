@@ -32,34 +32,11 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-/* Author: Wim Meeussen */
+#ifndef URDF_INTERFACE_JOINT_
+#define URDF_INTERFACE_JOINT_
 
-#ifndef URDF_MODEL_H
-#define URDF_MODEL_H
+#warning "Please Use #include <urdf_model/joint.h>"
 
-#include <string>
-#include <map>
-#include <urdf_parser/urdf_parser.h>
-#include <collada_parser/collada_parser.h>
-
-
-namespace urdf{
-
-class Model: public ModelInterface
-{
-public:
-  /// \brief Load Model from TiXMLElement
-  bool initXml(TiXmlElement *xml);
-  /// \brief Load Model from TiXMLDocument
-  bool initXml(TiXmlDocument *xml);
-  /// \brief Load Model given a filename
-  bool initFile(const std::string& filename);
-  /// \brief Load Model given the name of a parameter on the parameter server
-  bool initParam(const std::string& param);
-  /// \brief Load Model from a XML-string
-  bool initString(const std::string& xmlstring);
-};
-
-}
+#include <urdf_model/joint.h>
 
 #endif

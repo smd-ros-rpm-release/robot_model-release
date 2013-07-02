@@ -3,6 +3,7 @@
 import roslib; roslib.load_manifest('joint_state_publisher')
 import rospy
 import wx
+import wx.lib.newevent
 import xml.dom.minidom
 from sensor_msgs.msg import JointState
 from math import pi
@@ -28,9 +29,7 @@ class JointStatePublisher():
         self.dependent_joints = get_param("dependent_joints", {})
         use_mimic = get_param('use_mimic_tags', True)
         use_small = get_param('use_smallest_joint_limits', True)
-
-        self.zeros = get_param("zeros")
-
+        
         pub_def_positions = get_param("publish_default_positions", True)
         pub_def_vels = get_param("publish_default_velocities", False)
         pub_def_efforts = get_param("publish_default_efforts", False)
@@ -49,13 +48,10 @@ class JointStatePublisher():
                     minval = -pi
                     maxval = pi
                 else:
-                    try:
-                        limit = child.getElementsByTagName('limit')[0]
-                        minval = float(limit.getAttribute('lower'))
-                        maxval = float(limit.getAttribute('upper'))
-                    except:
-                        continue
-
+                    limit = child.getElementsByTagName('limit')[0]
+                    minval = float(limit.getAttribute('lower'))
+                    maxval = float(limit.getAttribute('upper'))
+                    
                 safety_tags = child.getElementsByTagName('safety_controller')
                 if use_small and len(safety_tags)==1:
                     tag = safety_tags[0]
@@ -78,10 +74,7 @@ class JointStatePublisher():
 
                 if name in self.dependent_joints:
                     continue
-
-                if self.zeros and name in self.zeros:
-                    zeroval = self.zeros[name]
-                elif minval > 0 or maxval < 0:
+                if minval > 0 or maxval < 0:
                     zeroval = (maxval + minval)/2
                 else:
                     zeroval = 0
@@ -143,7 +136,8 @@ class JointStatePublisher():
                 joint['effort'] = effort
 
         if self.gui is not None:
-            self.gui.update_sliders()
+            # post an event here instead of directly calling the update_sliders method, to switch to the wx thread
+            wx.PostEvent(self.gui.GetEventHandler(), self.gui.UpdateSlidersEvent())
         
 
     def loop(self):
@@ -261,6 +255,9 @@ class JointStatePublisherGui(wx.Frame):
             self.joint_map[name] = {'slidervalue':0, 'display':display, 
                                     'slider':slider, 'joint':joint}
 
+        self.UpdateSlidersEvent, self.EVT_UPDATESLIDERS = wx.lib.newevent.NewEvent()
+        self.Bind(self.EVT_UPDATESLIDERS, self.updateSliders)
+        
         ### Buttons ###
         self.ctrbutton = wx.Button(panel, 1, 'Center')
         self.Bind(wx.EVT_SLIDER, self.sliderUpdate)
@@ -281,6 +278,9 @@ class JointStatePublisherGui(wx.Frame):
             joint = joint_info['joint']
             value = self.sliderToValue(purevalue, joint)
             joint['position'] = value
+        self.update_sliders()
+
+    def updateSliders(self, event):
         self.update_sliders()
 
     def update_sliders(self):
@@ -326,3 +326,4 @@ if __name__ == '__main__':
             jsp.app.MainLoop()
         
     except rospy.ROSInterruptException: pass
+
