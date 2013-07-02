@@ -1,0 +1,12 @@
+Source: ros-groovy-robot-model
+Section: misc
+Priority: extra
+Maintainer: "Ioan Sucan <isucan@willowgarage.com>"
+Build-Depends: debhelper (>= 7.0.50~), ros-groovy-catkin
+Homepage: http://ros.org/wiki/robot_model
+Standards-Version: 3.9.2
+
+Package: ros-groovy-robot-model
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, collada-dom-dev, graphviz, libassimp-dev, libcurl4-openssl-dev, ros-groovy-angles, ros-groovy-collada-parser, ros-groovy-collada-urdf, ros-groovy-common-msgs, ros-groovy-convex-decomposition, ros-groovy-geometry, ros-groovy-ivcon, ros-groovy-kdl-parser, ros-groovy-orocos-kdl, ros-groovy-resource-retriever, ros-groovy-robot-state-publisher, ros-groovy-ros, ros-groovy-ros-comm, ros-groovy-rosconsole-bridge, ros-groovy-srdf, ros-groovy-urdf, ros-groovy-urdf-interface, ros-groovy-urdf-parser, ros-groovy-urdfdom, ros-groovy-urdfdom-headers
+Description: robot_model contains packages for modeling various aspects of robot information, specified in the Xml Robot Description Format (URDF). The core package of this stack is urdf, which parses URDF files, and constructs an object model (C++) of the robot.
