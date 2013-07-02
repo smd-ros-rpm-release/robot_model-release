@@ -1,0 +1,12 @@
+Source: ros-hydro-collada-parser
+Section: misc
+Priority: extra
+Maintainer: "Ioan Sucan <isucan@willowgarage.com>"
+Build-Depends: debhelper (>= 7.0.50~), collada-dom-dev, ros-hydro-catkin, ros-hydro-class-loader, ros-hydro-roscpp, ros-hydro-urdf-parser-plugin, ros-hydro-urdfdom-headers
+Homepage: http://ros.org/wiki/collada_parser
+Standards-Version: 3.9.2
+
+Package: ros-hydro-collada-parser
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, collada-dom-dev, ros-hydro-class-loader, ros-hydro-roscpp, ros-hydro-urdf-parser-plugin, ros-hydro-urdfdom-headers
+Description: This package contains a C++ parser for the Collada robot description format. The parser reads a Collada XML robot description, and creates a C++ URDF model. Although it is possible to directly use this parser when working with Collada robot descriptions, the preferred user API is found in the urdf package.
