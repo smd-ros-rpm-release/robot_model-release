@@ -1,0 +1,12 @@
+Source: ros-groovy-urdf-parser
+Section: misc
+Priority: extra
+Maintainer: "Ioan Sucan <isucan@willowgarage.com>"
+Build-Depends: debhelper (>= 7.0.50~), ros-groovy-catkin, ros-groovy-urdfdom
+Homepage: http://ros.org/wiki/urdf_parser
+Standards-Version: 3.9.2
+
+Package: ros-groovy-urdf-parser
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-groovy-urdfdom
+Description: This package is DEPRECATED. Please use the urdfdom dependency directly instead of this package. This package contains a C++ parser for the Unified Robot Description Format (URDF), which is an XML format for representing a robot model. The parser reads a URDF XML robot description, and creates a C++ URDF model. Although it is possible to directly use this parser when working with URDF robot descriptions, the preferred user API is found in the urdf package.
