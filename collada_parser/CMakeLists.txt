@@ -3,12 +3,14 @@ project(collada_parser)
 
 find_package(Boost REQUIRED system)
 
-find_package(catkin REQUIRED COMPONENTS urdfdom_headers roscpp)
+find_package(catkin REQUIRED COMPONENTS urdfdom_headers urdf_parser_plugin roscpp class_loader)
 
 catkin_package( 
   LIBRARIES ${PROJECT_NAME}
   INCLUDE_DIRS include
-  CATKIN_DEPENDS urdfdom_headers roscpp)
+  CATKIN_DEPENDS roscpp urdf_parser_plugin
+  DEPENDS urdfdom_headers
+)
 
 include_directories(${Boost_INCLUDE_DIR})
 include_directories(include ${catkin_INCLUDE_DIRS})
@@ -29,10 +31,16 @@ if(HAVE_MKSTEMPS)
   add_definitions("-DHAVE_MKSTEMPS")
 endif()
 
-#common commands for building c++ executables and libraries
+# build the parser lib
 add_library(${PROJECT_NAME} src/collada_parser.cpp)
 target_link_libraries(${PROJECT_NAME}
   ${COLLADA_DOM_LIBRARIES} ${Boost_LIBRARIES} ${catkin_LIBRARIES}
+)
+
+# build the plugin for the parser
+add_library(${PROJECT_NAME}_plugin src/collada_parser_plugin.cpp)
+target_link_libraries(${PROJECT_NAME}_plugin
+  ${PROJECT_NAME} ${Boost_LIBRARIES} ${catkin_LIBRARIES}
 )
 
 set_target_properties(${PROJECT_NAME}
@@ -49,8 +57,11 @@ else()
   )
 endif()
 
-install(TARGETS ${PROJECT_NAME} 
+install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_plugin
   DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
 install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+
+install(FILES collada_parser_plugin_description.xml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
