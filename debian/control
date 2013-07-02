@@ -1,0 +1,12 @@
+Source: ros-hydro-urdf-parser-plugin
+Section: misc
+Priority: extra
+Maintainer: "Ioan Sucan <isucan@willowgarage.com>"
+Build-Depends: debhelper (>= 7.0.50~), ros-hydro-catkin, ros-hydro-urdfdom-headers
+Homepage: http://ros.org/wiki/urdf
+Standards-Version: 3.9.2
+
+Package: ros-hydro-urdf-parser-plugin
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-hydro-urdfdom-headers
+Description: This package contains a C++ base class for URDF parsers.
