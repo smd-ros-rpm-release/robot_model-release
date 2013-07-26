@@ -1,0 +1,12 @@
+Source: ros-hydro-collada-urdf
+Section: misc
+Priority: extra
+Maintainer: Ioan Sucan <isucan@willowgarage.com>
+Build-Depends: debhelper (>= 7.0.50~), collada-dom-dev, libassimp-dev, ros-hydro-angles, ros-hydro-catkin, ros-hydro-collada-parser, ros-hydro-geometric-shapes, ros-hydro-resource-retriever, ros-hydro-roscpp, ros-hydro-urdf
+Homepage: http://ros.org/wiki/collada_urdf
+Standards-Version: 3.9.2
+
+Package: ros-hydro-collada-urdf
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, collada-dom-dev, libassimp-dev, ros-hydro-angles, ros-hydro-collada-parser, ros-hydro-geometric-shapes, ros-hydro-resource-retriever, ros-hydro-roscpp, ros-hydro-urdf
+Description: This package contains a tool to convert Unified Robot Description Format (URDF) documents into COLLAborative Design Activity (COLLADA) documents. Implements robot-specific COLLADA extensions as defined by http://openrave.programmingvision.com/index.php/Started:COLLADA
