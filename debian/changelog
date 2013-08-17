@@ -1,0 +1,7 @@
+ros-hydro-urdf (1.10.15-0raring) raring; urgency=high
+
+  * fix #30 <https://github.com/ros/robot_model/issues/30>
+
+ -- Ioan Sucan <isucan@willowgarage.com>  Fri, 16 Aug 2013 21:00:00 -0000
+
+
