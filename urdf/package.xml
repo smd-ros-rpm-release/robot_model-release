@@ -1,6 +1,6 @@
 <package>
   <name>urdf</name>
-  <version>1.10.14</version>
+  <version>1.10.15</version>
   <description>
     This package contains a C++ parser for the Unified Robot Description
     Format (URDF), which is an XML format for representing a robot model. 
@@ -25,6 +25,7 @@
   <build_depend>urdfdom_headers</build_depend>
   <build_depend>urdf_parser_plugin</build_depend>
   <build_depend>pluginlib</build_depend>
+  <build_depend>cmake_modules</build_depend>
 
   <run_depend>rosconsole_bridge</run_depend>
   <run_depend>roscpp</run_depend>
