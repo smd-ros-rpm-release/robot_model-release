@@ -1,0 +1,7 @@
+ros-hydro-resource-retriever (1.10.15-0precise) precise; urgency=high
+
+  * resource_retriever: install python package using setup.py
+
+ -- Ioan Sucan <isucan@willowgarage.com>  Fri, 16 Aug 2013 21:00:00 -0000
+
+
