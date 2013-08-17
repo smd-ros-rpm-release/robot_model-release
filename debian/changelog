@@ -1,0 +1,8 @@
+ros-hydro-robot-model (1.10.15-0precise) precise; urgency=high
+
+  * remove unneeded deps (fix #32 <https://github.com/ros/robot_model/issues/32>)
+  * Created new diagram for documenting URDF
+
+ -- Ioan Sucan <isucan@willowgarage.com>  Fri, 16 Aug 2013 21:00:00 -0000
+
+
