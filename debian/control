@@ -1,0 +1,12 @@
+Source: ros-hydro-resource-retriever
+Section: misc
+Priority: extra
+Maintainer: Ioan Sucan <isucan@willowgarage.com>
+Build-Depends: debhelper (>= 7.0.50~), libcurl4-openssl-dev, ros-hydro-catkin (>= 0.5.68), ros-hydro-rosconsole, ros-hydro-roslib
+Homepage: http://ros.org/wiki/resource_retriever
+Standards-Version: 3.9.2
+
+Package: ros-hydro-resource-retriever
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libcurl4-openssl-dev, ros-hydro-rosconsole, ros-hydro-roslib
+Description: This package retrieves data from url-format files such as http://, ftp://, package:// file://, etc., and loads the data into memory. The package:// url for ros packages is translated into a local file:// url. The resourse retriever was initially designed to load mesh files into memory, but it can be used for any type of data. The resource retriever is based on the the libcurl library.
