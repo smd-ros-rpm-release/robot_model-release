@@ -1,0 +1,21 @@
+ros-hydro-robot-model (1.10.18-1quantal) quantal; urgency=high
+
+  * add DEPENDS for kdl_parser
+  * Contributors: Ioan Sucan
+
+ -- Ioan Sucan <isucan@gmail.com>  Wed, 04 Dec 2013 08:00:00 -0000
+
+ros-hydro-robot-model (1.10.16-1quantal) quantal; urgency=high
+
+
+
+ -- Ioan Sucan <isucan@willowgarage.com>  Mon, 18 Nov 2013 08:00:00 -0000
+
+ros-hydro-robot-model (1.10.15-1quantal) quantal; urgency=high
+
+  * remove unneeded deps (fix #32 <https://github.com/ros/robot_model/issues/32>)
+  * Created new diagram for documenting URDF
+
+ -- Ioan Sucan <isucan@willowgarage.com>  Sat, 17 Aug 2013 07:00:00 -0000
+
+
