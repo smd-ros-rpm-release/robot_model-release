@@ -1,3 +1,30 @@
+## robot_model - 1.10.18-1
+
+User `isucan@isucan-glaptop0` released the packages in the `robot_model` repository by running `/usr/bin/bloom-release -t hydro -r hydro robot_model` on `Wed, 04 Dec 2013 19:40:36 -0000`
+
+These packages were released:
+- `collada_parser`
+- `collada_urdf`
+- `joint_state_publisher`
+- `kdl_parser`
+- `resource_retriever`
+- `robot_model`
+- `urdf`
+- `urdf_parser_plugin`
+
+Version of package(s) in repository `robot_model`:
+- rosdistro version: `1.10.17-0`
+- old version: `1.10.18-0`
+- new version: `1.10.18-1`
+
+Versions of tools used:
+- bloom version: `0.4.4`
+- catkin_pkg version: `0.1.24`
+- rosdep version: `0.10.24`
+- rosdistro version: `0.2.17`
+- vcstools version: `0.1.32`
+
+
 ## robot_model - 1.10.18-0
 
 User `isucan@isucan-glaptop0` released the packages in the `robot_model` repository by running `/usr/bin/bloom-release -t hydro -r hydro robot_model` on `Wed, 04 Dec 2013 19:24:10 -0000`
