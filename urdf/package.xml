@@ -1,6 +1,6 @@
 <package>
   <name>urdf</name>
-  <version>1.10.17</version>
+  <version>1.10.18</version>
   <description>
     This package contains a C++ parser for the Unified Robot Description
     Format (URDF), which is an XML format for representing a robot model. 
@@ -9,7 +9,7 @@
   </description>
 
   <author>Ioan Sucan</author>
-  <maintainer email="isucan@willowgarage.com">Ioan Sucan</maintainer>
+  <maintainer email="isucan@gmail.com">Ioan Sucan</maintainer>
 
   <license>BSD</license>
 
