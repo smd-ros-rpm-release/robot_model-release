@@ -1,6 +1,6 @@
 <package>
   <name>robot_model</name>
-  <version>1.10.17</version>
+  <version>1.10.18</version>
   <description>
     <tt>robot_model</tt> contains packages for modeling various
     aspects of robot information, specified in the Xml Robot
@@ -9,8 +9,8 @@
     object model (C++) of the robot.
   </description>
 
-  <author email="isucan@willowgarage.com">Ioan Sucan</author>
-  <maintainer email="isucan@willowgarage.com">Ioan Sucan</maintainer>
+  <author email="isucan@gmail.com">Ioan Sucan</author>
+  <maintainer email="isucan@gmail.com">Ioan Sucan</maintainer>
 
   <license>BSD</license>
 
