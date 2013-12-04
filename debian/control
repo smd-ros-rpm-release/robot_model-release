@@ -1,0 +1,12 @@
+Source: ros-hydro-joint-state-publisher
+Section: misc
+Priority: extra
+Maintainer: David Lu!!! <davidlu@wustl.edu>
+Build-Depends: debhelper (>= 7.0.50~), python-wxgtk2.8, ros-hydro-catkin, ros-hydro-rospy, ros-hydro-sensor-msgs
+Homepage: http://www.ros.org/wiki/joint_state_publisher
+Standards-Version: 3.9.2
+
+Package: ros-hydro-joint-state-publisher
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, python-wxgtk2.8, ros-hydro-rospy, ros-hydro-sensor-msgs
+Description: This package contains a tool for setting and publishing joint state values for a given URDF.
