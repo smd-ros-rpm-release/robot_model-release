@@ -683,9 +683,25 @@ protected:
         for (size_t ilink = 0; ilink < ktec->getLink_array().getCount(); ++ilink) {
             domLinkRef pdomlink = ktec->getLink_array()[ilink];
             _RootOrigin  = _poseFromMatrix(_ExtractFullTransform(pdomlink));
-            ROS_DEBUG("RootOrigin: %lf %lf %lf %lf %lf %lf %lf",
-                      _RootOrigin.position.x,  _RootOrigin.position.y, _RootOrigin.position.z,
+            ROS_DEBUG("RootOrigin: %s %lf %lf %lf %lf %lf %lf %lf",
+                      pdomlink->getName(),
+                      _RootOrigin.position.x, _RootOrigin.position.y, _RootOrigin.position.z,
                       _RootOrigin.rotation.x, _RootOrigin.rotation.y, _RootOrigin.rotation.z, _RootOrigin.rotation.w);
+
+            domNodeRef pvisualnode;
+            FOREACH(it, bindings.listKinematicsVisualBindings) {
+              if(strcmp(it->first->getName() ,pdomlink->getName()) == 0) {
+                pvisualnode = it->first;
+                break;
+              }
+            }
+            if (!!pvisualnode) {
+              _VisualRootOrigin  = _poseFromMatrix(_getNodeParentTransform(pvisualnode));
+              ROS_DEBUG("VisualRootOrigin: %s %lf %lf %lf %lf %lf %lf %lf",
+                        pdomlink->getName(),
+                        _VisualRootOrigin.position.x, _VisualRootOrigin.position.y, _VisualRootOrigin.position.z,
+                        _VisualRootOrigin.rotation.x, _VisualRootOrigin.rotation.y, _VisualRootOrigin.rotation.z, _VisualRootOrigin.rotation.w);
+            }
             _ExtractLink(pdomlink, ilink == 0 ? pnode : domNodeRef(), Pose(), Pose(), vdomjoints, bindings);
         }
 
@@ -862,7 +878,6 @@ protected:
             }
         }
 
-
         std::list<GEOMPROPERTIES> listGeomProperties;
         if (!pdomlink) {
             ROS_WARN_STREAM("Extract object NOT kinematics !!!\n");
@@ -880,7 +895,8 @@ protected:
             //            ROS_INFO("link %s trans: %f %f %f",linkname.c_str(),plink->visual->origin.position.x,plink->visual->origin.position.y,plink->visual->origin.position.z);
 
             // Get the geometry
-            _ExtractGeometry(pdomnode,listGeomProperties,listAxisBindings,_poseMult(_poseMult(tParentWorldLink,tlink),plink->visual->origin));
+            _ExtractGeometry(pdomnode, listGeomProperties, listAxisBindings,
+                             _poseMult(_poseMult(tParentWorldLink,tlink), plink->visual->origin));
 
             ROS_DEBUG_STREAM(str(boost::format("After ExtractGeometry Attachment link elements: %d\n")%pdomlink->getAttachment_full_array().getCount()));
 
@@ -1124,48 +1140,49 @@ protected:
         }
 
         plink->visual->geometry = _CreateGeometry(plink->name, listGeomProperties);
-        // visual_groups
-        boost::shared_ptr<std::vector<boost::shared_ptr<Visual > > > viss;
-        viss.reset(new std::vector<boost::shared_ptr<Visual > >);
-        viss->push_back(plink->visual);
-        plink->visual_groups.insert(std::make_pair("default", viss));
+        // visual_groups deprecated
+        //boost::shared_ptr<std::vector<boost::shared_ptr<Visual > > > viss;
+        //viss.reset(new std::vector<boost::shared_ptr<Visual > >);
+        //viss->push_back(plink->visual);
+        //plink->visual_groups.insert(std::make_pair("default", viss));
 
-        // collision
-        plink->collision.reset(new Collision());
-        plink->collision->geometry = plink->visual->geometry;
-        plink->collision->origin   = plink->visual->origin;
+        if( !plink->visual->geometry ) {
+          plink->visual.reset();
+          plink->collision.reset();
+        } else {
+          // collision
+          plink->collision.reset(new Collision());
+          plink->collision->geometry = plink->visual->geometry;
+          plink->collision->origin   = plink->visual->origin;
+        }
 
-        // collision_groups
-        boost::shared_ptr<std::vector<boost::shared_ptr<Collision > > > cols;
-        cols.reset(new std::vector<boost::shared_ptr<Collision > >);
-        cols->push_back(plink->collision);
-        plink->collision_groups.insert(std::make_pair("default", cols));
+        // collision_groups deprecated
+        //boost::shared_ptr<std::vector<boost::shared_ptr<Collision > > > cols;
+        //cols.reset(new std::vector<boost::shared_ptr<Collision > >);
+        //cols->push_back(plink->collision);
+        //plink->collision_groups.insert(std::make_pair("default", cols));
 
         return plink;
     }
 
     boost::shared_ptr<Geometry> _CreateGeometry(const std::string& name, const std::list<GEOMPROPERTIES>& listGeomProperties)
     {
-        boost::shared_ptr<Mesh> geometry(new Mesh());
-        geometry->type = Geometry::MESH;
-        geometry->scale.x = 1;
-        geometry->scale.y = 1;
-        geometry->scale.z = 1;
-
         std::vector<std::vector<Vector3> > vertices;
         std::vector<std::vector<int> > indices;
         std::vector<Color> ambients;
         std::vector<Color> diffuses;
-        unsigned int index;
+        unsigned int index, vert_counter;
         vertices.resize(listGeomProperties.size());
         indices.resize(listGeomProperties.size());
         ambients.resize(listGeomProperties.size());
         diffuses.resize(listGeomProperties.size());
         index = 0;
+        vert_counter = 0;
         FOREACHC(it, listGeomProperties) {
             vertices[index].resize(it->vertices.size());
             for(size_t i = 0; i < it->vertices.size(); ++i) {
                 vertices[index][i] = _poseMult(it->_t, it->vertices[i]);
+                vert_counter++;
             }
             indices[index].resize(it->indices.size());
             for(size_t i = 0; i < it->indices.size(); ++i) {
@@ -1187,6 +1204,18 @@ protected:
             }
             index++;
         }
+
+        if (vert_counter == 0) {
+          boost::shared_ptr<Mesh> ret;
+          ret.reset();
+          return ret;
+        }
+
+        boost::shared_ptr<Mesh> geometry(new Mesh());
+        geometry->type = Geometry::MESH;
+        geometry->scale.x = 1;
+        geometry->scale.y = 1;
+        geometry->scale.z = 1;
 
         // have to save the geometry into individual collada 1.4 files since URDF does not allow triangle meshes to be specified
         std::stringstream daedata;
@@ -1388,10 +1417,18 @@ protected:
             itgeom++; // change only the transformations of the newly found geometries.
         }
 
-        boost::array<double,12> tmnodegeom = _poseMult(_matrixFromPose(_poseInverse(tlink)), _poseMult(_getNodeParentTransform(pdomnode), _ExtractFullTransform(pdomnode)));
+        boost::array<double,12> tmnodegeom = _poseMult(_matrixFromPose(_poseInverse(tlink)),
+                                                       _poseMult(_poseMult(_matrixFromPose(_poseInverse(_VisualRootOrigin)),
+                                                                           _getNodeParentTransform(pdomnode)),
+                                                                 _ExtractFullTransform(pdomnode)));
         Pose tnodegeom;
         Vector3 vscale(1,1,1);
         _decompose(tmnodegeom, tnodegeom, vscale);
+
+        ROS_DEBUG_STREAM("tnodegeom: " << pdomnode->getName()
+                         << tnodegeom.position.x << " " << tnodegeom.position.y << " " << tnodegeom.position.z << " / "
+                         << tnodegeom.rotation.x << " " << tnodegeom.rotation.y << " " << tnodegeom.rotation.z << " "
+                         << tnodegeom.rotation.w);
 
         //        std::stringstream ss; ss << "geom: ";
         //        for(int i = 0; i < 4; ++i) {
@@ -2706,6 +2743,7 @@ protected:
     std::string _resourcedir;
     boost::shared_ptr<ModelInterface> _model;
     Pose _RootOrigin;
+    Pose _VisualRootOrigin;
 };
 
 
