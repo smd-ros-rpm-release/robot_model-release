@@ -2,6 +2,9 @@
 Changelog for package collada_parser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.11.2 (2014-03-22)
+-------------------
+
 1.11.1 (2014-03-20)
 -------------------
 * remove visual and collision if there is no vertices
