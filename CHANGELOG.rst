@@ -2,6 +2,11 @@
 Changelog for package urdf_parser_plugin
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.11.3 (2014-06-24)
+-------------------
+* update usage of urdfdom_headers for indigo/trusty
+* Contributors: William Woodall
+
 1.11.2 (2014-03-22)
 -------------------
 
