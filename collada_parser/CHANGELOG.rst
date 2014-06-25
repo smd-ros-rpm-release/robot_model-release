@@ -1,0 +1,32 @@
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Changelog for package collada_parser
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1.11.2 (2014-03-22)
+-------------------
+
+1.11.1 (2014-03-20)
+-------------------
+* remove visual and collision if there is no vertices
+* do not use visual and collision group
+* fix debug message
+* fix problem of root coordinates
+* Contributors: YoheiKakiuchi
+
+1.11.0 (2014-02-21)
+-------------------
+* fix, joint axis should be rotated depend on local coords
+* fix overwriting velocity limit
+* Contributors: YoheiKakiuchi
+
+1.10.18 (2013-12-04)
+--------------------
+* add DEPENDS for kdl_parser
+* Contributors: Ioan Sucan
+
+1.10.16 (2013-11-18)
+--------------------
+* fix for using collada_parser_plugin
+
+1.10.15 (2013-08-17)
+--------------------
