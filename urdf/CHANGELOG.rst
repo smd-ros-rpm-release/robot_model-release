@@ -2,6 +2,11 @@
 Changelog for package urdf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.11.4 (2014-07-07)
+-------------------
+* moving to new dependency for urdfdom and urdfdom_headers. https://github.com/ros/rosdistro/issues/4633
+* Contributors: Tully Foote
+
 1.11.3 (2014-06-24)
 -------------------
 * fix urdfdom_headers find_package re `ros/rosdistro#4633 <https://github.com/ros/rosdistro/issues/4633>`_
