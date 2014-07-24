@@ -1,3 +1,34 @@
+## robot_model (indigo) - 1.11.5-0
+
+The packages in the `robot_model` repository were released into the `indigo` distro by running `/usr/local/bin/bloom-release -r indigo -t indigo robot_model` on `Thu, 24 Jul 2014 21:02:44 -0000`
+
+These packages were released:
+- `collada_parser`
+- `collada_urdf`
+- `joint_state_publisher`
+- `kdl_parser`
+- `robot_model`
+- `urdf`
+- `urdf_parser_plugin`
+
+These packages were explicitly ignored:
+- `resource_retriever`
+
+Version of package(s) in repository `robot_model`:
+- upstream repository: https://github.com/ros/robot_model.git
+- release repository: https://github.com/ros-gbp/robot_model-release.git
+- rosdistro version: `1.11.4-0`
+- old version: `1.11.4-0`
+- new version: `1.11.5-0`
+
+Versions of tools used:
+- bloom version: `0.5.11-dev`
+- catkin_pkg version: `0.2.2`
+- rosdep version: `0.10.27`
+- rosdistro version: `0.3.5`
+- vcstools version: `0.1.35`
+
+
 ## robot_model (indigo) - 1.11.4-0
 
 The packages in the `robot_model` repository were released into the `indigo` distro by running `/usr/bin/bloom-release -r indigo -t indigo robot_model` on `Mon, 07 Jul 2014 15:47:09 -0000`
