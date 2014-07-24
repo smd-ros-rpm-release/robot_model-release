@@ -2,6 +2,9 @@
 Changelog for package collada_urdf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.11.5 (2014-07-24)
+-------------------
+
 1.11.4 (2014-07-07)
 -------------------
 * moving to new dependency for urdfdom and urdfdom_headers. https://github.com/ros/rosdistro/issues/4633
