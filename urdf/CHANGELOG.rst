@@ -2,6 +2,15 @@
 Changelog for package urdf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.20 (2014-08-01)
+--------------------
+
+1.10.19 (2014-02-15)
+-------------------
+* fix urdf files for test
+* fix test at urdf
+* Contributors: YoheiKakiuchi
+
 1.10.18 (2013-12-04)
 --------------------
 * add DEPENDS for kdl_parser
