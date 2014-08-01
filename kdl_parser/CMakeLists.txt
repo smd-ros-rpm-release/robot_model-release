@@ -17,8 +17,10 @@ link_directories(${catkin_LIBRARY_DIRS})
 link_directories(${orocos_kdl_LIBRARY_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 
+find_library(KDL_LIBRARY REQUIRED NAMES orocos-kdl HINTS ${orocos_kdl_LIBRARY_DIRS})
+
 catkin_package(
-  LIBRARIES ${PROJECT_NAME}
+  LIBRARIES ${PROJECT_NAME} ${KDL_LIBRARY}
   INCLUDE_DIRS include
   CATKIN_DEPENDS roscpp rosconsole urdf
   DEPENDS orocos_kdl TinyXML
@@ -33,7 +35,8 @@ add_executable(check_kdl_parser src/check_kdl_parser.cpp )
 target_link_libraries(check_kdl_parser ${PROJECT_NAME})
 
 if(CATKIN_ENABLE_TESTING)
-  catkin_add_gtest(test_kdl_parser test/test_kdl_parser.cpp )
+  find_package(catkin REQUIRED COMPONENTS rostest)
+  add_rostest_gtest(test_kdl_parser test/test_kdl_parser.launch test/test_kdl_parser.cpp )
   target_link_libraries(test_kdl_parser ${PROJECT_NAME})
 endif()
 
