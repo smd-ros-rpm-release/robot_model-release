@@ -3,8 +3,7 @@ project(collada_parser)
 
 find_package(Boost REQUIRED system)
 
-find_package(catkin REQUIRED COMPONENTS urdf_parser_plugin roscpp class_loader)
-find_package(urdfdom_headers REQUIRED)
+find_package(catkin REQUIRED COMPONENTS urdfdom_headers urdf_parser_plugin roscpp class_loader)
 
 catkin_package( 
   LIBRARIES ${PROJECT_NAME}
@@ -14,7 +13,7 @@ catkin_package(
 )
 
 include_directories(${Boost_INCLUDE_DIR})
-include_directories(include ${catkin_INCLUDE_DIRS} ${urdfdom_headers_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS})
 
 set(CMAKE_MODULE_PATH  ${PROJECT_SOURCE_DIR}/cmake-extensions/)
 find_package(PkgConfig)
