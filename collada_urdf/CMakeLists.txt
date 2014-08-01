@@ -12,9 +12,6 @@ catkin_package(
 
 include_directories(include)
 
-find_package(Boost REQUIRED COMPONENTS system filesystem program_options)
-include_directories(${Boost_INCLUDE_DIR})
-
 find_package(assimp QUIET)
 if ( NOT ASSIMP_FOUND )
   find_package(Assimp QUIET)
@@ -24,9 +21,11 @@ if ( NOT ASSIMP_FOUND )
   endif()
 endif()
 if( ASSIMP_FOUND )
-  if( ${ASSIMP_VERSION} STRGREATER "2.0.0" )
-    set(IS_ASSIMP3 1)
-    add_definitions(-DIS_ASSIMP3)
+  if( NOT ${ASSIMP_VERSION} VERSION_LESS "2.0.1150" )
+    add_definitions(-DASSIMP_UNIFIED_HEADER_NAMES)
+  endif()
+  if( NOT ${ASSIMP_VERSION} VERSION_LESS "2.0.885" )
+    add_definitions(-DASSIMP_EXPORT_API)
   endif()
   include_directories(${ASSIMP_INCLUDE_DIRS})
   link_directories(${ASSIMP_LIBRARY_DIRS})
@@ -38,8 +37,12 @@ else()
   set(ASSIMP_CFLAGS_OTHER)
   set(ASSIMP_LINK_FLAGS)
   set(ASSIMP_INCLUDE_DIRS)
-  set(IS_ASSIMP3 0) # most likely not
 endif()
+
+# Note: assimp 3.1 overwrites CMake Boost variables, so we need to check for
+# Boost after assimp.
+find_package(Boost REQUIRED COMPONENTS system filesystem program_options)
+include_directories(${Boost_INCLUDE_DIR})
 
 find_package(COLLADA_DOM 2.3 COMPONENTS 1.5)
 if( COLLADA_DOM_FOUND )
