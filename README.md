@@ -1,3 +1,32 @@
+## robot_model (hydro) - 1.10.21-0
+
+The packages in the `robot_model` repository were released into the `hydro` distro by running `/usr/bin/bloom-release -t hydro -r hydro robot_model` on `Sun, 30 Nov 2014 19:20:09 -0000`
+
+These packages were released:
+- `collada_parser`
+- `collada_urdf`
+- `joint_state_publisher`
+- `kdl_parser`
+- `resource_retriever`
+- `robot_model`
+- `urdf`
+- `urdf_parser_plugin`
+
+Version of package(s) in repository `robot_model`:
+- upstream repository: https://github.com/ros/robot_model.git
+- release repository: https://github.com/ros-gbp/robot_model-release.git
+- rosdistro version: `1.10.20-0`
+- old version: `1.10.20-0`
+- new version: `1.10.21-0`
+
+Versions of tools used:
+- bloom version: `0.5.14`
+- catkin_pkg version: `0.2.6`
+- rosdep version: `0.10.33`
+- rosdistro version: `0.3.6`
+- vcstools version: `0.1.35`
+
+
 ## robot_model (hydro) - 1.10.20-0
 
 The packages in the `robot_model` repository were released into the `hydro` distro by running `/usr/local/bin/bloom-release -r hydro -t hydro robot_model` on `Fri, 01 Aug 2014 22:10:58 -0000`
