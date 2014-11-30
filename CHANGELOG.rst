@@ -2,6 +2,11 @@
 Changelog for package kdl_parser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.11.6 (2014-11-30)
+-------------------
+* add version dependency on orocos_kdl >= 1.3.0
+* Contributors: William Woodall
+
 1.11.5 (2014-07-24)
 -------------------
 * Update KDL SegmentMap interface to optionally use shared pointers
