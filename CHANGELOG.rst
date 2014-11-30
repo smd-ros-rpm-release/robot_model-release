@@ -2,6 +2,11 @@
 Changelog for package joint_state_publisher
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.21 (2014-11-30)
+--------------------
+* Added floating joints to joint types ignored by publisher
+* Contributors: Shaun Edwards
+
 1.10.20 (2014-08-01)
 --------------------
 * Update package.xml
