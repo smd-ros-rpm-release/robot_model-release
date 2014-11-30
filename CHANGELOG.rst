@@ -2,6 +2,9 @@
 Changelog for package kdl_parser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.21 (2014-11-30)
+--------------------
+
 1.10.20 (2014-08-01)
 --------------------
 * add version dependency on orocos_kdl >= 1.3.0
