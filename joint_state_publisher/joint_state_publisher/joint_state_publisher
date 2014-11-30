@@ -41,7 +41,7 @@ class JointStatePublisher():
                 continue
             if child.localName == 'joint':
                 jtype = child.getAttribute('type')
-                if jtype == 'fixed':
+                if jtype == 'fixed' or jtype == 'floating':
                     continue
                 name = child.getAttribute('name')
                 self.joint_list.append(name)
@@ -54,6 +54,7 @@ class JointStatePublisher():
                         minval = float(limit.getAttribute('lower'))
                         maxval = float(limit.getAttribute('upper'))
                     except:
+                        rospy.logwarn("%s is not fixed, nor continuous, but limits are not specified!" % name)
                         continue
 
                 safety_tags = child.getElementsByTagName('safety_controller')
@@ -113,7 +114,7 @@ class JointStatePublisher():
         for source in source_list:
             self.sources.append(rospy.Subscriber(source, JointState, self.source_cb))
 
-        self.pub = rospy.Publisher('joint_states', JointState)
+        self.pub = rospy.Publisher('joint_states', JointState, queue_size=5)
 
     def source_cb(self, msg):
         for i in range(len(msg.name)):
