@@ -2,13 +2,31 @@
 Changelog for package urdf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1.10.21 (2014-11-30)
---------------------
+1.11.6 (2014-11-30)
+-------------------
+* Add install for static libs needed for Android cross-compilation
+* Contributors: Gary Servin
 
-1.10.20 (2014-08-01)
---------------------
+1.11.5 (2014-07-24)
+-------------------
 
-1.10.19 (2014-02-15)
+1.11.4 (2014-07-07)
+-------------------
+* moving to new dependency for urdfdom and urdfdom_headers. https://github.com/ros/rosdistro/issues/4633
+* Contributors: Tully Foote
+
+1.11.3 (2014-06-24)
+-------------------
+* fix urdfdom_headers find_package re `ros/rosdistro#4633 <https://github.com/ros/rosdistro/issues/4633>`_
+* Contributors: Tully Foote
+
+1.11.2 (2014-03-22)
+-------------------
+
+1.11.1 (2014-03-20)
+-------------------
+
+1.11.0 (2014-02-21)
 -------------------
 * fix urdf files for test
 * fix test at urdf

@@ -2,21 +2,35 @@
 Changelog for package joint_state_publisher
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1.10.21 (2014-11-30)
---------------------
+1.11.6 (2014-11-30)
+-------------------
 * Added floating joints to joint types ignored by publisher
-* Contributors: Shaun Edwards
+* warn when joints have no limits
+* add queue_size for publisher
+* Contributors: Jihoon Lee, Michael Ferguson, Shaun Edwards
 
-1.10.20 (2014-08-01)
---------------------
+1.11.5 (2014-07-24)
+-------------------
+
+1.11.4 (2014-07-07)
+-------------------
 * Update package.xml
-  Updating author and maintainer for consistency.
+  Updating author and maintainer email for consistency
 * Contributors: David Lu!!
 
-1.10.19 (2014-02-15)
+1.11.3 (2014-06-24)
+-------------------
+
+1.11.2 (2014-03-22)
+-------------------
+
+1.11.1 (2014-03-20)
+-------------------
+
+1.11.0 (2014-02-21)
 -------------------
 * Use #!/usr/bin/env python for systems with multiple Python versions.
-* Contributors: Benjamin Chrétien
+* Contributors: Benjamin Chretien
 
 1.10.18 (2013-12-04)
 --------------------

@@ -2,19 +2,33 @@
 Changelog for package kdl_parser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1.10.21 (2014-11-30)
---------------------
-
-1.10.20 (2014-08-01)
---------------------
+1.11.6 (2014-11-30)
+-------------------
 * add version dependency on orocos_kdl >= 1.3.0
-* kdl_parser: Adding kdl library explicitly so that dependees can find it
+* Contributors: William Woodall
+
+1.11.5 (2014-07-24)
+-------------------
 * Update KDL SegmentMap interface to optionally use shared pointers
   The KDL Tree API optionally uses shared pointers on platforms where
   the STL containers don't support incomplete types.
-* Contributors: Brian Jensen, Jonathan Bohren, William Woodall
+* Contributors: Brian Jensen
 
-1.10.19 (2014-02-15)
+1.11.4 (2014-07-07)
+-------------------
+
+1.11.3 (2014-06-24)
+-------------------
+* kdl_parser: Adding kdl library explicitly so that dependees can find it
+* Contributors: Jonathan Bohren
+
+1.11.2 (2014-03-22)
+-------------------
+
+1.11.1 (2014-03-20)
+-------------------
+
+1.11.0 (2014-02-21)
 -------------------
 * fix test at kdl_parser
 * Contributors: YoheiKakiuchi
