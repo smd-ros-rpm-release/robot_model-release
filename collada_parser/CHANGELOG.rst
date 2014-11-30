@@ -2,6 +2,11 @@
 Changelog for package collada_parser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.21 (2014-11-30)
+--------------------
+* fix rotation of joint axis when oriantation between parent link and child link is differ
+* Contributors: YoheiKakiuchi
+
 1.10.20 (2014-08-01)
 --------------------
 * Added extract actuators, fix for using nominal torque
