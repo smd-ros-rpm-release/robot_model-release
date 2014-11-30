@@ -1,0 +1,45 @@
+ros-hydro-collada-parser (1.10.21-0quantal) quantal; urgency=high
+
+  * fix rotation of joint axis when oriantation between parent link and child link is differ
+  * Contributors: YoheiKakiuchi
+
+ -- Ioan Sucan <isucan@gmail.com>  Sun, 30 Nov 2014 08:00:00 -0000
+
+ros-hydro-collada-parser (1.10.20-0quantal) quantal; urgency=high
+
+  * Added extract actuators, fix for using nominal torque
+  * Removed visual and collision meshes if there are no vertices
+  * Removed use of visual and collision groups
+  * Fix problem with root coordinates
+  * Contributors: YoheiKakiuchi
+
+ -- Ioan Sucan <isucan@gmail.com>  Fri, 01 Aug 2014 07:00:00 -0000
+
+ros-hydro-collada-parser (1.10.19-0quantal) quantal; urgency=high
+
+  * fix, joint axis should be rotated depend on local coords
+  * fix overwriting velocity limit
+  * Contributors: YoheiKakiuchi
+
+ -- Ioan Sucan <isucan@gmail.com>  Sat, 15 Feb 2014 08:00:00 -0000
+
+ros-hydro-collada-parser (1.10.18-0quantal) quantal; urgency=high
+
+  * add DEPENDS for kdl_parser
+  * Contributors: Ioan Sucan
+
+ -- Ioan Sucan <isucan@gmail.com>  Wed, 04 Dec 2013 08:00:00 -0000
+
+ros-hydro-collada-parser (1.10.16-0quantal) quantal; urgency=high
+
+  * fix for using collada_parser_plugin
+
+ -- Ioan Sucan <isucan@willowgarage.com>  Mon, 18 Nov 2013 08:00:00 -0000
+
+ros-hydro-collada-parser (1.10.15-0quantal) quantal; urgency=high
+
+
+
+ -- Ioan Sucan <isucan@willowgarage.com>  Sat, 17 Aug 2013 07:00:00 -0000
+
+
